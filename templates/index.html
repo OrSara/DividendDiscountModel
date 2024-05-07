@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/app.js"></script>
+    
+    <title>JavaScript Project</title>
+
+</head>
+<body>
+
+    <div class="box">
+        <h2>Stock Price Valuation</h2>
+        <h2>Dividend Discount Model</h2>
+        <!-- Text Field to enter the company and exchange -->
+        <form id="ticker" class="form">
+            <form id="ticker" class="form">
+                <div id="forms" class="centered">
+                    <input type="text" id="userName" placeholder="Username...">
+                    <input type="text" id="userTicker" placeholder="Company ticker...">
+                    <input type="text" id="userExchange" placeholder="Exchange symbol...">
+                </div>
+            
+                <div id="buttons" class="centered">
+                    <button class="deleteButton">Delete</button>
+                    <button id="inputButton">Submit</button>
+                </div>
+            </form>
+            
+        </form>
+    </div>
+    
+
+    <div class="hidden" id="progressBar">
+        <div class="meter animate">
+            <span style="width: 2%"></span>
+            <p class=hidden id="task">Task in progress</p>
+        </div>
+    </div>
+        
+
+    <!-- Footer -->
+    <footer>
+        <span>
+            <p>Data sources: St. Louis Fed API, Yahoo Finance, Financial Modeling Prep API*</p>
+            <p id="disclaimer">* Financial Modeling Prep API has a daily limit of free requests</p>
+        </span>
+    </footer>
+        
+</body>
+</html>
