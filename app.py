@@ -1,20 +1,34 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, jsonify, Response
 from config import MONGO_URI
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from getRiskFree import *
+from dotenv import load_dotenv
+import os
 
 
 #create an instance of the Flask class
 app = Flask(__name__, template_folder="templates")
 app.config['MONGO_URI'] = MONGO_URI
-
+# Load environment variables from .env file
+load_dotenv()
 
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    keyFRED = os.getenv('keyFRED')
+    keyFMP = os.getenv('keyFMP')
+    return render_template('index.html', keyFRED=keyFRED, keyFMP= keyFMP)
+
+
+@app.route('/js/config.js')
+def get_config():
+    # Access environment variables
+    keyFRED = os.getenv('keyFRED')
+    keyFMP = os.getenv('keyFMP')
+    js_config = f"const config = {{ keyFRED: '{keyFRED}', keyFMP: '{keyFMP}' }};"
+    return Response(js_config, mimetype='application/javascript')
 
 
 @app.route('/riskFreeRate', methods=['POST'])
