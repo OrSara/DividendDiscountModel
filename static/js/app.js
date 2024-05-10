@@ -95,6 +95,7 @@ function updateProgressBar(value) {
 
 // Function to simulate tasks and update progress
 async function simulateTasks(sharePrices) {
+    var keyFRED = config.keyFRED;
     // Define total tasks and set initial progress
     const totalTasks = 3;
     let completedTasks = 0;
@@ -115,7 +116,7 @@ async function simulateTasks(sharePrices) {
 
         // Task 2: Get S&P500 index prices
         updateProgressBar(++completedTasks / totalTasks * 100);
-        let sp500Prices = await getMarketPrices();
+        let sp500Prices = await getMarketPrices(keyFRED);
 
         // Task 3: Compute cost of equity
         updateProgressBar(++completedTasks / totalTasks * 100);
@@ -212,6 +213,7 @@ async function getFullQuote(URLFullQuote) {
 }
 
 async function sharePrice(userTicker) {
+    var keyFMP = config.keyFMP;
 	// Construct the API path
 	let URLFullQuote = `https://financialmodelingprep.com/api/v3/quote/${userTicker}?apikey=${keyFMP}`;
 
@@ -280,6 +282,7 @@ async function getSplits(URLSplits) {
 }
 
 async function split(userTicker) {
+    var keyFMP = config.keyFMP;
 	// Construct the API path
 	URLSplits = `https://financialmodelingprep.com/api/v3/historical-price-full/stock_split/${userTicker}?apikey=${keyFMP}`;
 	//API call
@@ -352,6 +355,7 @@ async function computeYearlyDividends(apiDividends) {
 }
 
 async function getFullQuote(URLFullQuote) {
+    var keyFMP = config.keyFMP;
 	let response = await fetch(URLFullQuote);
 	let apiFullQuote = await response.json();
 
@@ -359,9 +363,10 @@ async function getFullQuote(URLFullQuote) {
 }
 
 async function dividends(apiData, userTicker, sharePrices) {
+    var keyFMP = config.keyFMP;
 	// Construct the API path
 	URLDividends = `https://financialmodelingprep.com/api/v3/historical-price-full/stock_dividend/${userTicker}?apikey=${keyFMP}`;
-	//API call
+    //API call
 	let apiDividends = [];
 
 	try {
@@ -376,7 +381,7 @@ async function dividends(apiData, userTicker, sharePrices) {
 	let medianGrowthRate = await computeMedian(growthRateArray);
 
 	//get the current share price and show it on the UI
-	let apiFullQuote = await sharePrice(userTicker);
+	let apiFullQuote = await sharePrice(userTicker, keyFMP);
 	let cSharePrice = apiFullQuote[0]["price"];
 	
 	//assuming that the future dividends will grow at the same growth rate as the medianGrowthRate
@@ -389,7 +394,7 @@ async function dividends(apiData, userTicker, sharePrices) {
 	displayResults(apiData, sharePrices, fairPrice, medianGrowthRate, beta);
 }
 
-async function TimeSeriesSharePrice(userTicker) {
+async function TimeSeriesSharePrice(userTicker, keyFMP) {
     // Get the current date
     const today = new Date();
 
@@ -513,6 +518,7 @@ async function getSP500(URLYFinance) {
 }
 
 async function getMarketPrices() {
+    var keyFRED = config.keyFRED;
     let endDate = getCurrentDate();
     let startDate = get2YearsAgoDate();
 
@@ -636,6 +642,7 @@ function regressionBeta(xArray, yArray) {
 }
 
 async function computeCostOfEquity() {
+    var keyFRED = config.keyFRED;
     let sharePrices = await TimeSeriesSharePrice(userTicker);
     
     try {
@@ -643,7 +650,7 @@ async function computeCostOfEquity() {
         let riskFreeRate = await sendData('^TNX', '/riskFreeRate');
 
         // Continue with other computations that depend on riskFreeRate
-        let sp500Prices = await getMarketPrices();
+        let sp500Prices = await getMarketPrices(keyFRED);
         let startingDateIndex = getStartingDateIndex(sharePrices, sp500Prices);
         let result = getArrays(sp500Prices, sharePrices, startingDateIndex);
         let sp500 = result.xArray;
@@ -667,6 +674,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	document.getElementById("inputButton").addEventListener("click", async (e) => {
 		e.preventDefault();
 		removeResults();
+        var keyFMP = config.keyFMP;
+        var keyFRED = config.keyFRED;
 
 		userName = document.getElementById("userName").value.trim();
     	userTicker = document.getElementById("userTicker").value.trim();
@@ -676,7 +685,6 @@ document.addEventListener("DOMContentLoaded", function() {
 	
 		// Construct the API path
 		URL = `https://financialmodelingprep.com/api/v3/search-ticker?query=${userTicker}&limit=10&exchange=${userExchange}&apikey=${keyFMP}`;
-
     	//API call to check if ticker exists
 	
 		try {
@@ -697,10 +705,12 @@ document.addEventListener("DOMContentLoaded", function() {
     		document.getElementById("progressBar").value = 0;
 
     		// Call simulateTasks function
-    		await simulateTasks();
+    		await simulateTasks(keyFRED);
 	
 		} catch (error) {
 			console.log(error);
 		}
 	});
 });
+
+
