@@ -1,5 +1,5 @@
 ﻿appdirs==1.4.4
-dotenv==0.0.5
+python-dotenv==0.21.0
 beautifulsoup4==4.12.3
 blinker==1.7.0
 certifi==2024.2.2
