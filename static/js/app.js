@@ -1,3 +1,6 @@
+keyFMP = process.env.keyFMP
+keyFRED = process.env.keyFRED
+
 function sendData(userData, endpoint) {
     return new Promise((resolve, reject) => {
         $.ajax({ 
