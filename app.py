@@ -8,7 +8,7 @@ import os
 
 
 #create an instance of the Flask class
-app = Flask(__name__, template_folder="templates")
+app = Flask(__name__, template_folder = "templates")
 app.config['MONGO_URI'] = MONGO_URI
 # Load environment variables from .env file
 load_dotenv()
@@ -19,7 +19,7 @@ load_dotenv()
 def index():
     keyFRED = os.getenv('keyFRED')
     keyFMP = os.getenv('keyFMP')
-    return render_template('index.html', keyFRED=keyFRED, keyFMP= keyFMP)
+    return render_template('index.html', keyFRED = keyFRED, keyFMP = keyFMP)
 
 
 @app.route('/js/config.js')
@@ -28,7 +28,7 @@ def get_config():
     keyFRED = os.getenv('keyFRED')
     keyFMP = os.getenv('keyFMP')
     js_config = f"const config = {{ keyFRED: '{keyFRED}', keyFMP: '{keyFMP}' }};"
-    return Response(js_config, mimetype='application/javascript')
+    return Response(js_config, mimetype = 'application/javascript')
 
 
 @app.route('/riskFreeRate', methods=['POST'])
